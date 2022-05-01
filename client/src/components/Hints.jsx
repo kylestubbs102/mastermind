@@ -9,7 +9,7 @@ import { useGameFinished } from "../context/GameFinishedProvider";
 function Hints({ guess }) {
   const PLACEHOLDER_HINT_COLOR = "lightgrey";
   const { secret } = useSecret();
-  const {setGameFinished} = useGameFinished();
+  const { setGameFinished } = useGameFinished();
 
   const [hintColors, setHintColors] = useState(
     Array(4).fill(PLACEHOLDER_HINT_COLOR)
@@ -27,18 +27,18 @@ function Hints({ guess }) {
       return acc;
     }, {});
 
-    let indexMap = {};
+    let indexSet = new Set();
 
     _.zip(guess, secret).forEach(([guessColor, secretColor], index) => {
       if (guessColor === secretColor) {
         occurrencesMap[guessColor] -= 1;
         newHintColors.push("red");
-        indexMap[index] = 1;
+        indexSet.add(index);
       }
     });
 
     _.forEach(guess, (guessColor, index) => {
-      if (index in indexMap) return;
+      if (index in indexSet) return;
 
       if (occurrencesMap[guessColor]) {
         occurrencesMap[guessColor] -= 1;
@@ -50,8 +50,8 @@ function Hints({ guess }) {
       newHintColors.push(PLACEHOLDER_HINT_COLOR);
     }
 
-    if (newHintColors.every(hc => hc === "red")) {
-        setGameFinished(true);
+    if (newHintColors.every((hc) => hc === "red")) {
+      setGameFinished(true);
     }
 
     setHintColors(newHintColors);

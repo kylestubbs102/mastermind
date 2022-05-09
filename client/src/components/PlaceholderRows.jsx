@@ -9,6 +9,7 @@ import {
   ROW_WIDTH,
 } from "../resources/constants";
 import Hints from "./Hints";
+import { memo } from "react";
 
 function PlaceholderRows() {
   const { guesses } = useGuesses();
@@ -40,4 +41,4 @@ function PlaceholderRows() {
   );
 }
 
-export default PlaceholderRows;
+export default memo(PlaceholderRows);

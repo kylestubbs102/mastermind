@@ -8,4 +8,8 @@ export const HINT_SIZE = "20px"
 export const ACTIVE_PIECE_BORDER = "4px solid black";
 export const INACTIVE_PIECE_BORDER = "2px solid black";
 
+export const PLACEHOLDER_PIECE_COLOR = "white";
+
 export const HINT_BORDER = "2px solid black";
+
+export const SOCKET_URL = "http://localhost:3001"

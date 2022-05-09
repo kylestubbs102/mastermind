@@ -1,4 +1,4 @@
-import { Circle, VStack } from "@chakra-ui/react";
+import { Circle, Flex } from "@chakra-ui/react";
 import { useColor } from "../context/ColorProvider";
 import {
   ACTIVE_PIECE_BORDER,
@@ -7,25 +7,41 @@ import {
   PIECE_SIZE,
 } from "../resources/constants";
 import { v4 as uuid } from "uuid";
+import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
+import { useSecret } from "../context/SecretProvider";
 
-function ColorPicker() {
+function ColorPicker({ orientation }) {
   const { color, setColor } = useColor();
+  const { secret } = useSecret();
+  const { isGuessingPlayer } = useIsGuessingPlayer();
 
   return (
-    <VStack align="center" padding={5}>
+    <Flex
+      flexDirection={orientation}
+      align="center"
+      rowGap={2}
+      columnGap={2}
+      padding={5}
+    >
       {COLORS.map((circleColor) => (
         <Circle
           size={PIECE_SIZE}
           bg={circleColor}
           border={
-            circleColor === color ? ACTIVE_PIECE_BORDER : INACTIVE_PIECE_BORDER
+            circleColor === color && (isGuessingPlayer || secret.length === 0)
+              ? ACTIVE_PIECE_BORDER
+              : INACTIVE_PIECE_BORDER
           }
           key={uuid()}
-          onClick={() => setColor(circleColor)}
+          onClick={() =>
+            isGuessingPlayer || secret.length === 0
+              ? setColor(circleColor)
+              : null
+          }
           style={{ cursor: "pointer" }}
         />
       ))}
-    </VStack>
+    </Flex>
   );
 }
 

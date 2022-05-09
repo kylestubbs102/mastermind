@@ -1,13 +1,14 @@
 import { Circle, HStack } from "@chakra-ui/react";
 import _ from "lodash";
-import { useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
+import { memo, useEffect, useState } from "react";
 import { useSecret } from "../context/SecretProvider";
 import { HINT_BORDER, HINT_SIZE } from "../resources/constants";
-import { v4 as uuid } from "uuid";
 import { useGameFinished } from "../context/GameFinishedProvider";
 
 function Hints({ guess }) {
   const PLACEHOLDER_HINT_COLOR = "lightgrey";
+
   const { secret } = useSecret();
   const { setGameFinished } = useGameFinished();
 
@@ -38,7 +39,7 @@ function Hints({ guess }) {
     });
 
     _.forEach(guess, (guessColor, index) => {
-      if (index in indexSet) return;
+      if (indexSet.has(index)) return;
 
       if (occurrencesMap[guessColor]) {
         occurrencesMap[guessColor] -= 1;
@@ -71,4 +72,4 @@ function Hints({ guess }) {
   );
 }
 
-export default Hints;
+export default memo(Hints);

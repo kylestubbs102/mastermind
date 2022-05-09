@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 const IsGuessingPlayerContext = createContext();
 
 export default function IsGuessingPlayerProvider({ children }) {
-  const [isGuessingPlayer, setIsGuessingPlayer] = useState(null);
+  const [isGuessingPlayer, setIsGuessingPlayer] = useState();
   return (
     <IsGuessingPlayerContext.Provider value={{ isGuessingPlayer, setIsGuessingPlayer }}>
       {children}

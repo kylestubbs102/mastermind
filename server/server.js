@@ -12,6 +12,10 @@ const io = require("socket.io")(server, {
   },
 });
 
+app.get("*", (req, res) => {
+  res.send("ok");
+});
+
 io.on("connection", (socket) => {
   var currentRoomId;
 

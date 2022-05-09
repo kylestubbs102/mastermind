@@ -7,7 +7,7 @@ const io = require("socket.io")(server, {
   cors: {
     origin: [
       "http://localhost:3000",
-      "https://ks-mastermind-client.herokuapp.com/",
+      "https://ks-mastermind-client.herokuapp.com",
     ],
   },
 });

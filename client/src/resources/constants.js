@@ -12,4 +12,5 @@ export const PLACEHOLDER_PIECE_COLOR = "white";
 
 export const HINT_BORDER = "2px solid black";
 
-export const SOCKET_URL = "http://localhost:3001"
+export const SOCKET_URL = "https://ks-mastermind-server.herokuapp.com/"
+// export const SOCKET_URL = "http://localhost:3001"

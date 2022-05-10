@@ -82,7 +82,10 @@ function PlayerRow({ singleplayer }) {
 
   // checks if secret is equal to last guess
   useEffect(() => {
-    if (guesses.length === 0) return;
+    if (guesses.length === 0) {
+      setCurrentGuess(Array(4).fill(PLACEHOLDER_PIECE_COLOR));
+      return;
+    }
 
     let lastGuess = guesses[guesses.length - 1];
     if (_.isEqual(lastGuess, secret)) {

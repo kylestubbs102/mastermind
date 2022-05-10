@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
 import { Alert, AlertIcon, AlertTitle, Button } from "@chakra-ui/react";
-import { useGuesses } from "../context/GuessProvider";
-import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
-import { useSecret } from "../context/SecretProvider";
-import { useColor } from "../context/ColorProvider";
+import { Link } from "react-router-dom";
+import { useColor } from "../../context/ColorProvider";
+import { useGuesses } from "../../context/GuessProvider";
+import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
+import { useSecret } from "../../context/SecretProvider";
 
 function PlayerLeftAlert() {
   const { setGuesses } = useGuesses();

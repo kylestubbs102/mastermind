@@ -1,13 +1,13 @@
 import { Circle, HStack } from "@chakra-ui/react";
-import { v4 as uuid } from "uuid";
 import { memo, useEffect, useState } from "react";
-import { useSecret } from "../context/SecretProvider";
+import { v4 as uuid } from "uuid";
+import { useSecret } from "../../context/SecretProvider";
 import {
   HINT_BORDER,
   HINT_SIZE,
   PLACEHOLDER_HINT_COLOR,
-} from "../resources/constants";
-import { calculateHints } from "../resources/game-logic";
+} from "../../resources/constants";
+import { calculateHints } from "../../resources/game-logic";
 
 function Hints({ guess }) {
   const { secret } = useSecret();

@@ -1,15 +1,15 @@
 import { Circle, HStack } from "@chakra-ui/react";
 import _ from "lodash";
-import { useGuesses } from "../context/GuessProvider";
+import { memo } from "react";
 import { v4 as uuid } from "uuid";
+import { useGuesses } from "../../context/GuessProvider";
 import {
   INACTIVE_PIECE_BORDER,
   PIECE_SIZE,
   ROW_PADDING,
   ROW_WIDTH,
-} from "../resources/constants";
+} from "../../resources/constants";
 import Hints from "./Hints";
-import { memo } from "react";
 
 function PlaceholderRows() {
   const { guesses } = useGuesses();

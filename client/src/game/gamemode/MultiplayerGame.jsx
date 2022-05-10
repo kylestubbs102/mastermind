@@ -1,14 +1,14 @@
 import { Flex, Heading, VStack } from "@chakra-ui/react";
-import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
-import { useSecret } from "../context/SecretProvider";
-import Board from "./Board";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import WaitingScreen from "./WaitingScreen";
-import { useSocket } from "../context/SocketProvider";
-import CreateSecretScreen from "./CreateSecretScreen";
-import PlayerLeftAlert from "./PlayerLeftAlert";
-import { useGameStarted } from "../context/GameStartedProvider";
+import { useGameStarted } from "../../context/GameStartedProvider";
+import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
+import { useSecret } from "../../context/SecretProvider";
+import { useSocket } from "../../context/SocketProvider";
+import Board from "../components/Board";
+import PlayerLeftAlert from "../components/PlayerLeftAlert";
+import CreateSecretScreen from "../pages/CreateSecretScreen";
+import WaitingScreen from "../pages/WaitingScreen";
 
 function MultiplayerGame() {
   const { setIsGuessingPlayer } = useIsGuessingPlayer();
@@ -22,8 +22,6 @@ function MultiplayerGame() {
   const { gameId } = useParams();
 
   const urlIsValid = gameId !== undefined && gameId.length === 10;
-
-  // TODO: refactor into useGame() and dispatch event
 
   /*
     First player gets to welcome screen, emits message that he's ready  
@@ -54,7 +52,15 @@ function MultiplayerGame() {
     socket.on("other player left", () => {
       setPlayerLeft(true);
     });
-  }, [gameId, socket, urlIsValid, setIsGuessingPlayer, setSecret, playerLeft, setGameStarted]);
+  }, [
+    gameId,
+    socket,
+    urlIsValid,
+    setIsGuessingPlayer,
+    setSecret,
+    playerLeft,
+    setGameStarted,
+  ]);
 
   return (
     <>

@@ -1,17 +1,17 @@
-import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
 import { Button, Circle, Flex, Heading, HStack } from "@chakra-ui/react";
-import ColorPicker from "./ColorPicker";
-import { v4 as uuid } from "uuid";
-import {
-  ROW_WIDTH,
-  INACTIVE_PIECE_BORDER,
-  PLACEHOLDER_PIECE_COLOR,
-  PIECE_SIZE,
-} from "../resources/constants";
-import { useColor } from "../context/ColorProvider";
 import { useState } from "react";
-import { useSecret } from "../context/SecretProvider";
-import { useSocket } from "../context/SocketProvider";
+import { v4 as uuid } from "uuid";
+import { useColor } from "../../context/ColorProvider";
+import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
+import { useSecret } from "../../context/SecretProvider";
+import { useSocket } from "../../context/SocketProvider";
+import {
+  INACTIVE_PIECE_BORDER,
+  PIECE_SIZE,
+  PLACEHOLDER_PIECE_COLOR,
+  ROW_WIDTH,
+} from "../../resources/constants";
+import ColorPicker from "../components/ColorPicker";
 
 function CreateSecretScreen() {
   const { setSecret } = useSecret();

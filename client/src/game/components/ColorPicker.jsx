@@ -1,14 +1,14 @@
 import { Circle, Flex } from "@chakra-ui/react";
-import { useColor } from "../context/ColorProvider";
+import { v4 as uuid } from "uuid";
+import { useColor } from "../../context/ColorProvider";
+import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
+import { useSecret } from "../../context/SecretProvider";
 import {
   ACTIVE_PIECE_BORDER,
   COLORS,
   INACTIVE_PIECE_BORDER,
   PIECE_SIZE,
-} from "../resources/constants";
-import { v4 as uuid } from "uuid";
-import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
-import { useSecret } from "../context/SecretProvider";
+} from "../../resources/constants";
 
 function ColorPicker({ orientation }) {
   const { color, setColor } = useColor();

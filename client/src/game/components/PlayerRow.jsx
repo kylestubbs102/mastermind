@@ -1,20 +1,20 @@
 import { Button, Circle, HStack } from "@chakra-ui/react";
+import _ from "lodash";
 import { memo, useCallback, useEffect, useState } from "react";
-import { useGuesses } from "../context/GuessProvider";
 import { v4 as uuid } from "uuid";
+import { useColor } from "../../context/ColorProvider";
+import { useGameFinished } from "../../context/GameFinishedProvider";
+import { useGuesses } from "../../context/GuessProvider";
+import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
+import { useSecret } from "../../context/SecretProvider";
+import { useSocket } from "../../context/SocketProvider";
 import {
   INACTIVE_PIECE_BORDER,
   PIECE_SIZE,
   PLACEHOLDER_PIECE_COLOR,
   ROW_PADDING,
   ROW_WIDTH,
-} from "../resources/constants";
-import { useColor } from "../context/ColorProvider";
-import { useGameFinished } from "../context/GameFinishedProvider";
-import { useSocket } from "../context/SocketProvider";
-import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
-import _ from "lodash";
-import { useSecret } from "../context/SecretProvider";
+} from "../../resources/constants";
 
 function PlayerRow({ singleplayer }) {
   const { guesses, setGuesses } = useGuesses();

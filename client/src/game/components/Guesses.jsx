@@ -1,12 +1,12 @@
 import { Circle, HStack } from "@chakra-ui/react";
-import { useGuesses } from "../context/GuessProvider";
 import { v4 as uuid } from "uuid";
+import { useGuesses } from "../../context/GuessProvider";
 import {
   INACTIVE_PIECE_BORDER,
   PIECE_SIZE,
   ROW_PADDING,
   ROW_WIDTH,
-} from "../resources/constants";
+} from "../../resources/constants";
 import Hints from "./Hints";
 
 function Guesses() {

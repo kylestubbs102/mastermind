@@ -1,9 +1,9 @@
 import { VStack } from "@chakra-ui/react";
-import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
-import { useSecret } from "../context/SecretProvider";
-import Board from "./Board";
 import { useEffect } from "react";
-import { getRandomSecret } from "../resources/game-logic";
+import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
+import { useSecret } from "../../context/SecretProvider";
+import { getRandomSecret } from "../../resources/game-logic";
+import Board from "../components/Board";
 
 function SingleplayerGame() {
   const { setIsGuessingPlayer } = useIsGuessingPlayer();

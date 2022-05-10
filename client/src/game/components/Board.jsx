@@ -1,12 +1,12 @@
 import { Divider, HStack, VStack } from "@chakra-ui/react";
+import { useGuesses } from "../../context/GuessProvider";
+import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
 import ColorPicker from "./ColorPicker";
 import Guesses from "./Guesses";
+import Header from "./Header";
 import PlaceholderRows from "./PlaceholderRows";
 import PlayerRow from "./PlayerRow";
-import Header from "./Header";
-import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
 import Secret from "./Secret";
-import { useGuesses } from "../context/GuessProvider";
 
 function Board({ singleplayer }) {
   const { isGuessingPlayer } = useIsGuessingPlayer();

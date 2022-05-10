@@ -1,5 +1,4 @@
-import { useGuesses } from "../context/GuessProvider";
-import { useGameFinished } from "../context/GameFinishedProvider";
+import { RepeatIcon } from "@chakra-ui/icons";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -13,14 +12,15 @@ import {
   Spacer,
   useDisclosure,
 } from "@chakra-ui/react";
-import { RepeatIcon } from "@chakra-ui/icons";
-import { useSecret } from "../context/SecretProvider";
-import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
-import { useColor } from "../context/ColorProvider";
-import { useSocket } from "../context/SocketProvider";
-import { useGameStarted } from "../context/GameStartedProvider";
 import { useCallback, useEffect, useState } from "react";
-import { getRandomSecret } from "../resources/game-logic";
+import { useColor } from "../../context/ColorProvider";
+import { useGameFinished } from "../../context/GameFinishedProvider";
+import { useGameStarted } from "../../context/GameStartedProvider";
+import { useGuesses } from "../../context/GuessProvider";
+import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
+import { useSecret } from "../../context/SecretProvider";
+import { useSocket } from "../../context/SocketProvider";
+import { getRandomSecret } from "../../resources/game-logic";
 
 function Header({ singleplayer }) {
   const { guesses, setGuesses } = useGuesses();

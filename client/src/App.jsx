@@ -1,21 +1,21 @@
+import { ChakraProvider } from "@chakra-ui/react";
 import {
   BrowserRouter as Router,
+  Navigate,
   Route,
   Routes,
-  Navigate,
 } from "react-router-dom";
-import { ChakraProvider } from "@chakra-ui/react";
-import ColorProvider from "../context/ColorProvider";
-import GameFinishedProvider from "../context/GameFinishedProvider";
-import GuessProvider from "../context/GuessProvider";
-import IsGuessingPlayerProvider from "../context/IsGuessingPlayerProvider";
-import SecretProvider from "../context/SecretProvider";
-import WelcomePage from "./WelcomePage";
-import theme from "../resources/theme";
-import SocketProvider from "../context/SocketProvider";
-import SingleplayerGame from "./SingleplayerGame";
-import MultiplayerGame from "./MultiplayerGame";
-import GameStartedProvider from "../context/GameStartedProvider";
+import ColorProvider from "./context/ColorProvider";
+import GameFinishedProvider from "./context/GameFinishedProvider";
+import GameStartedProvider from "./context/GameStartedProvider";
+import GuessProvider from "./context/GuessProvider";
+import IsGuessingPlayerProvider from "./context/IsGuessingPlayerProvider";
+import SecretProvider from "./context/SecretProvider";
+import SocketProvider from "./context/SocketProvider";
+import MultiplayerGame from "./game/gamemode/MultiplayerGame";
+import SingleplayerGame from "./game/gamemode/SingleplayerGame";
+import WelcomePage from "./game/pages/WelcomePage";
+import theme from "./resources/theme";
 
 function App() {
   function generateUrl(date) {

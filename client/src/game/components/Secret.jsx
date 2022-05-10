@@ -1,12 +1,12 @@
-import { useSecret } from "../context/SecretProvider";
+import { Circle, HStack } from "@chakra-ui/react";
+import { v4 as uuid } from "uuid";
+import { useSecret } from "../../context/SecretProvider";
 import {
   INACTIVE_PIECE_BORDER,
   PIECE_SIZE,
   ROW_PADDING,
   ROW_WIDTH,
-} from "../resources/constants";
-import { Circle, HStack } from "@chakra-ui/react";
-import { v4 as uuid } from "uuid";
+} from "../../resources/constants";
 
 function Secret() {
   const { secret } = useSecret();

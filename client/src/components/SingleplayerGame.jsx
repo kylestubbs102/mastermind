@@ -1,9 +1,9 @@
 import { VStack } from "@chakra-ui/react";
 import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
 import { useSecret } from "../context/SecretProvider";
-import { COLORS } from "../resources/constants";
 import Board from "./Board";
 import { useEffect } from "react";
+import { getRandomSecret } from "../resources/game-logic";
 
 function SingleplayerGame() {
   const { setIsGuessingPlayer } = useIsGuessingPlayer();
@@ -11,11 +11,7 @@ function SingleplayerGame() {
 
   useEffect(() => {
     setIsGuessingPlayer(true);
-    let newSecret = [];
-    for (let i = 0; i < 4; i++) {
-      let randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
-      newSecret.push(randomColor);
-    } // choose random secret
+    let newSecret = getRandomSecret();
     setSecret(newSecret);
   }, [setIsGuessingPlayer, setSecret]);
 

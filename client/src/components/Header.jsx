@@ -15,12 +15,12 @@ import {
 } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import { useSecret } from "../context/SecretProvider";
-import { COLORS } from "../resources/constants";
 import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
 import { useColor } from "../context/ColorProvider";
 import { useSocket } from "../context/SocketProvider";
 import { useGameStarted } from "../context/GameStartedProvider";
 import { useCallback, useEffect, useState } from "react";
+import { getRandomSecret } from "../resources/game-logic";
 
 function Header({ singleplayer }) {
   const { guesses, setGuesses } = useGuesses();
@@ -47,10 +47,7 @@ function Header({ singleplayer }) {
     let newSecret = [];
 
     if (singleplayer) {
-      for (let i = 0; i < 4; i++) {
-        let randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
-        newSecret.push(randomColor);
-      } // choose random secret
+      newSecret = getRandomSecret();
     }
 
     setSecret(newSecret);

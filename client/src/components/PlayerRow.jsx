@@ -13,12 +13,16 @@ import { useColor } from "../context/ColorProvider";
 import { useGameFinished } from "../context/GameFinishedProvider";
 import { useSocket } from "../context/SocketProvider";
 import { useIsGuessingPlayer } from "../context/IsGuessingPlayerProvider";
+import _ from "lodash";
+import { useSecret } from "../context/SecretProvider";
 
 function PlayerRow({ singleplayer }) {
   const { guesses, setGuesses } = useGuesses();
   const { color } = useColor();
+  const { secret } = useSecret();
   const { gameFinished } = useGameFinished();
   const { isGuessingPlayer } = useIsGuessingPlayer();
+  const { setGameFinished } = useGameFinished();
   const socket = useSocket();
 
   const [currentGuess, setCurrentGuess] = useState(
@@ -75,6 +79,16 @@ function PlayerRow({ singleplayer }) {
       socket.off("circle guess received", circleListener);
     };
   }, [pushGuess, singleplayer, socket, updateCurrentGuess]);
+
+  // checks if secret is equal to last guess
+  useEffect(() => {
+    if (guesses.length === 0) return;
+
+    let lastGuess = guesses[guesses.length - 1];
+    if (_.isEqual(lastGuess, secret)) {
+      setGameFinished(true);
+    }
+  }, [guesses, secret, setGameFinished]);
 
   return (
     <HStack

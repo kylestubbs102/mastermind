@@ -8,6 +8,7 @@ const io = require("socket.io")(server, {
     origin: [
       "http://localhost:3000",
       "https://kylestubbs-mastermind.herokuapp.com",
+      "https://kylestubbs-mastermind.netlify.app",
     ],
   },
 });

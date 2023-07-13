@@ -13,5 +13,5 @@ export const PLACEHOLDER_HINT_COLOR = "lightgrey";
 
 export const HINT_BORDER = "2px solid black";
 
-export const SOCKET_URL = "https://kylestubbs-mastermind-server.herokuapp.com";
-// export const SOCKET_URL = "http://localhost:3001"
+export const SOCKET_URL = "https://kylestubbs-mastermind-server.fly.dev";
+// export const SOCKET_URL = "http://localhost:8080"

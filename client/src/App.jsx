@@ -1,8 +1,9 @@
 import { ChakraProvider } from "@chakra-ui/react";
+import { Provider } from "react-redux";
 import {
-  BrowserRouter as Router,
   Navigate,
   Route,
+  BrowserRouter as Router,
   Routes,
 } from "react-router-dom";
 import ColorProvider from "./context/ColorProvider";
@@ -16,6 +17,7 @@ import MultiplayerGame from "./game/gamemode/MultiplayerGame";
 import SingleplayerGame from "./game/gamemode/SingleplayerGame";
 import WelcomePage from "./game/pages/WelcomePage";
 import theme from "./resources/theme";
+import store from "./store/store.js";
 
 function App() {
   function generateUrl(date) {
@@ -38,29 +40,31 @@ function App() {
               <IsGuessingPlayerProvider>
                 <GameStartedProvider>
                   <SocketProvider>
-                    <Router>
-                      <Routes>
-                        <Route path="/" element={<WelcomePage />} />
-                        <Route
-                          path="/singleplayer"
-                          element={<SingleplayerGame />}
-                        />
-                        <Route
-                          path="/multiplayer"
-                          on
-                          element={
-                            <Navigate
-                              to={"/multiplayer/" + generateUrl()}
-                              replace={true}
-                            />
-                          }
-                        />
-                        <Route
-                          path="/multiplayer/:gameId"
-                          element={<MultiplayerGame />}
-                        />
-                      </Routes>
-                    </Router>
+                    <Provider store={store}>
+                      <Router>
+                        <Routes>
+                          <Route path="/" element={<WelcomePage />} />
+                          <Route
+                            path="/singleplayer"
+                            element={<SingleplayerGame />}
+                          />
+                          <Route
+                            path="/multiplayer"
+                            on
+                            element={
+                              <Navigate
+                                to={"/multiplayer/" + generateUrl()}
+                                replace={true}
+                              />
+                            }
+                          />
+                          <Route
+                            path="/multiplayer/:gameId"
+                            element={<MultiplayerGame />}
+                          />
+                        </Routes>
+                      </Router>
+                    </Provider>
                   </SocketProvider>
                 </GameStartedProvider>
               </IsGuessingPlayerProvider>

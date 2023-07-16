@@ -1,21 +1,13 @@
 import { Alert, AlertIcon, AlertTitle, Button } from "@chakra-ui/react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { useColor } from "../../context/ColorProvider";
-import { useGuesses } from "../../context/GuessProvider";
-import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
-import { useSecret } from "../../context/SecretProvider";
+import { exitToHomeScreen } from "../../store/slices/updateGameSlice";
 
 function PlayerLeftAlert() {
-  const { setGuesses } = useGuesses();
-  const { setIsGuessingPlayer } = useIsGuessingPlayer();
-  const { setSecret } = useSecret();
-  const { setColor } = useColor();
+  const dispatch = useDispatch();
 
   function resetGame() {
-    setGuesses([]);
-    setIsGuessingPlayer();
-    setSecret([]);
-    setColor("white");
+    dispatch(exitToHomeScreen());
   }
 
   return (

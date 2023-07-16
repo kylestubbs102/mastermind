@@ -1,8 +1,8 @@
 import { Circle, HStack } from "@chakra-ui/react";
 import _ from "lodash";
 import { memo } from "react";
+import { shallowEqual, useSelector } from "react-redux";
 import { v4 as uuid } from "uuid";
-import { useGuesses } from "../../context/GuessProvider";
 import {
   INACTIVE_PIECE_BORDER,
   PIECE_SIZE,
@@ -12,7 +12,10 @@ import {
 import Hints from "./Hints";
 
 function PlaceholderRows() {
-  const { guesses } = useGuesses();
+  const guesses = useSelector(
+    (state) => state.updateGame.guesses,
+    shallowEqual
+  );
 
   const rows = 10 - guesses.length - 1;
 

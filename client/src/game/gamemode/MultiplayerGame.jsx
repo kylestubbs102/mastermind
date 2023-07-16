@@ -1,19 +1,27 @@
 import { Flex, Heading, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useGameStarted } from "../../context/GameStartedProvider";
-import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
-import { useSecret } from "../../context/SecretProvider";
 import { useSocket } from "../../context/SocketProvider";
+import {
+  gameReadyReceived,
+  setSecret,
+} from "../../store/slices/updateGameSlice";
 import Board from "../components/Board";
 import PlayerLeftAlert from "../components/PlayerLeftAlert";
 import CreateSecretScreen from "../pages/CreateSecretScreen";
 import WaitingScreen from "../pages/WaitingScreen";
 
 function MultiplayerGame() {
-  const { setIsGuessingPlayer } = useIsGuessingPlayer();
-  const { secret, setSecret } = useSecret();
-  const { gameStarted, setGameStarted } = useGameStarted();
+  const state = useSelector((state) => {
+    return {
+      gameStarted: state.updateGame.gameStarted,
+      secret: state.updateGame.secret,
+    };
+  }, shallowEqual);
+
+  const dispatch = useDispatch();
+
   const socket = useSocket();
 
   const [roomIsFull, setRoomIsFull] = useState(false);
@@ -36,8 +44,12 @@ function MultiplayerGame() {
     socket.emit("game ready", gameId);
 
     socket.once("game ready received", (isGuessing) => {
-      setIsGuessingPlayer(isGuessing);
-      setGameStarted(true);
+      dispatch(
+        gameReadyReceived({
+          isGuessingPlayer: isGuessing,
+          gameStarted: true,
+        })
+      );
     });
 
     socket.on("room is full", () => {
@@ -46,25 +58,17 @@ function MultiplayerGame() {
 
     // handled by guessing player
     socket.on("secret received", (secret) => {
-      setSecret(secret);
+      dispatch(setSecret(secret));
     });
 
     socket.on("other player left", () => {
       setPlayerLeft(true);
     });
-  }, [
-    gameId,
-    socket,
-    urlIsValid,
-    setIsGuessingPlayer,
-    setSecret,
-    playerLeft,
-    setGameStarted,
-  ]);
+  }, [gameId, socket, urlIsValid, playerLeft, dispatch]);
 
   return (
     <>
-      {playerLeft && gameStarted && <PlayerLeftAlert />}
+      {playerLeft && state.gameStarted && <PlayerLeftAlert />}
       {!urlIsValid ? (
         <Flex align="center" justify="center" minH="100vh">
           <Heading as="h1" size="2xl">
@@ -77,7 +81,7 @@ function MultiplayerGame() {
             Room is full
           </Heading>
         </Flex>
-      ) : gameStarted && secret.length > 0 ? (
+      ) : state.gameStarted && state.secret.length > 0 ? (
         <VStack
           justify="center"
           align="center"
@@ -87,7 +91,7 @@ function MultiplayerGame() {
         >
           <Board singleplayer={false} />
         </VStack>
-      ) : gameStarted && secret.length === 0 ? (
+      ) : state.gameStarted && state.secret.length === 0 ? (
         <CreateSecretScreen />
       ) : (
         <>

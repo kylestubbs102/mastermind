@@ -1,12 +1,8 @@
 import { Button, Circle, HStack } from "@chakra-ui/react";
 import _ from "lodash";
-import { memo, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { v4 as uuid } from "uuid";
-import { useColor } from "../../context/ColorProvider";
-import { useGameFinished } from "../../context/GameFinishedProvider";
-import { useGuesses } from "../../context/GuessProvider";
-import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
-import { useSecret } from "../../context/SecretProvider";
 import { useSocket } from "../../context/SocketProvider";
 import {
   INACTIVE_PIECE_BORDER,
@@ -15,14 +11,23 @@ import {
   ROW_PADDING,
   ROW_WIDTH,
 } from "../../resources/constants";
+import {
+  setGameFinished,
+  updateGuesses,
+} from "../../store/slices/updateGameSlice";
 
 function PlayerRow({ singleplayer }) {
-  const { guesses, setGuesses } = useGuesses();
-  const { color } = useColor();
-  const { secret } = useSecret();
-  const { gameFinished } = useGameFinished();
-  const { isGuessingPlayer } = useIsGuessingPlayer();
-  const { setGameFinished } = useGameFinished();
+  const state = useSelector((state) => {
+    return {
+      guesses: state.updateGame.guesses,
+      color: state.updateGame.color,
+      secret: state.updateGame.secret,
+      gameFinished: state.updateGame.gameFinished,
+      isGuessingPlayer: state.updateGame.isGuessingPlayer,
+    };
+  }, shallowEqual);
+  const dispatch = useDispatch();
+
   const socket = useSocket();
 
   const [currentGuess, setCurrentGuess] = useState(
@@ -31,10 +36,10 @@ function PlayerRow({ singleplayer }) {
 
   const updateCurrentGuess = useCallback(
     (circleGuess, index) => {
-      if (gameFinished) return;
+      if (state.gameFinished) return;
 
       // sent to player watching guessing player
-      if (isGuessingPlayer) {
+      if (state.isGuessingPlayer) {
         socket.emit("send circle guess", circleGuess, index);
       }
 
@@ -42,21 +47,21 @@ function PlayerRow({ singleplayer }) {
       guess[index] = circleGuess;
       setCurrentGuess(guess);
     },
-    [currentGuess, gameFinished, isGuessingPlayer, socket]
+    [currentGuess, socket, state.gameFinished, state.isGuessingPlayer]
   );
 
   const pushGuess = useCallback(
     (newGuess) => {
       // sent to player watching guessing player
-      if (isGuessingPlayer) {
+      if (state.isGuessingPlayer) {
         socket.emit("send row guess", newGuess);
       }
 
-      let newGuesses = [...guesses, newGuess];
-      setGuesses(newGuesses);
+      let newGuesses = [...state.guesses, newGuess];
       setCurrentGuess(Array(4).fill(PLACEHOLDER_PIECE_COLOR));
+      dispatch(updateGuesses(newGuesses));
     },
-    [guesses, isGuessingPlayer, setGuesses, socket]
+    [dispatch, socket, state.guesses, state.isGuessingPlayer]
   );
 
   useEffect(() => {
@@ -82,16 +87,16 @@ function PlayerRow({ singleplayer }) {
 
   // checks if secret is equal to last guess
   useEffect(() => {
-    if (guesses.length === 0) {
+    if (state.guesses.length === 0) {
       setCurrentGuess(Array(4).fill(PLACEHOLDER_PIECE_COLOR));
       return;
     }
 
-    let lastGuess = guesses[guesses.length - 1];
-    if (_.isEqual(lastGuess, secret)) {
-      setGameFinished(true);
+    let lastGuess = state.guesses[state.guesses.length - 1];
+    if (_.isEqual(lastGuess, state.secret)) {
+      dispatch(setGameFinished(true));
     }
-  }, [guesses, secret, setGameFinished]);
+  }, [dispatch, state.guesses, state.guesses.length, state.secret]);
 
   return (
     <HStack
@@ -107,17 +112,21 @@ function PlayerRow({ singleplayer }) {
             <Circle
               size={PIECE_SIZE}
               bg={currentGuessColor}
-              cursor={color === "white" || gameFinished ? "auto" : "pointer"}
+              cursor={
+                state.color === "white" || state.gameFinished
+                  ? "auto"
+                  : "pointer"
+              }
               border={INACTIVE_PIECE_BORDER}
               key={uuid()}
-              onClick={() => updateCurrentGuess(color, index)}
+              onClick={() => updateCurrentGuess(state.color, index)}
             />
           );
         })}
       </HStack>
-      {isGuessingPlayer && (
+      {state.isGuessingPlayer && (
         <Button
-          disabled={gameFinished ? true : currentGuess.includes("white")}
+          disabled={state.gameFinished ? true : currentGuess.includes("white")}
           onClick={() => pushGuess(currentGuess)}
         >
           Guess
@@ -127,4 +136,4 @@ function PlayerRow({ singleplayer }) {
   );
 }
 
-export default memo(PlayerRow);
+export default PlayerRow;

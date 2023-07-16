@@ -117,6 +117,7 @@ function PlayerRow({ singleplayer }) {
                   ? "auto"
                   : "pointer"
               }
+              pointerEvents={state.isGuessingPlayer ? "auto" : "none"}
               border={INACTIVE_PIECE_BORDER}
               key={uuid()}
               onClick={() => updateCurrentGuess(state.color, index)}

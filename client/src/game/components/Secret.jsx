@@ -1,6 +1,6 @@
 import { Circle, HStack } from "@chakra-ui/react";
+import { shallowEqual, useSelector } from "react-redux";
 import { v4 as uuid } from "uuid";
-import { useSecret } from "../../context/SecretProvider";
 import {
   INACTIVE_PIECE_BORDER,
   PIECE_SIZE,
@@ -9,7 +9,7 @@ import {
 } from "../../resources/constants";
 
 function Secret() {
-  const { secret } = useSecret();
+  const secret = useSelector((state) => state.updateGame.secret, shallowEqual);
 
   return (
     <HStack

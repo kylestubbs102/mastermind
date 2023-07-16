@@ -13,22 +13,21 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { useColor } from "../../context/ColorProvider";
-import { useGameFinished } from "../../context/GameFinishedProvider";
-import { useGameStarted } from "../../context/GameStartedProvider";
-import { useGuesses } from "../../context/GuessProvider";
-import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
-import { useSecret } from "../../context/SecretProvider";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useSocket } from "../../context/SocketProvider";
 import { getRandomSecret } from "../../resources/game-logic";
+import { resetMultiplayerGame } from "../../store/slices/updateGameSlice";
 
 function Header({ singleplayer }) {
-  const { guesses, setGuesses } = useGuesses();
-  const { setSecret } = useSecret();
-  const { gameFinished, setGameFinished } = useGameFinished();
-  const { isGuessingPlayer, setIsGuessingPlayer } = useIsGuessingPlayer();
-  const { setColor } = useColor();
-  const { setGameStarted } = useGameStarted();
+  const dispatch = useDispatch();
+  const state = useSelector((state) => {
+    return {
+      gameFinished: state.updateGame.gameFinished,
+      guesses: state.updateGame.guesses,
+      isGuessingPlayer: state.updateGame.isGuessingPlayer,
+    };
+  }, shallowEqual);
+
   const socket = useSocket();
 
   const [opponentSentReset, setOpponentSetReset] = useState(false);
@@ -37,9 +36,9 @@ function Header({ singleplayer }) {
   const { isOpen, onOpen } = useDisclosure();
 
   const title =
-    !gameFinished && guesses.length < 10
-      ? "Turn " + (guesses.length + 1)
-      : guesses.length < 10 && isGuessingPlayer
+    !state.gameFinished && state.guesses.length < 10
+      ? "Turn " + (state.guesses.length + 1)
+      : state.guesses.length < 10 && state.isGuessingPlayer
       ? "You won!"
       : "You lost :(";
 
@@ -50,22 +49,15 @@ function Header({ singleplayer }) {
       newSecret = getRandomSecret();
     }
 
-    setSecret(newSecret);
-    setGameFinished(false);
-    setGuesses([]);
-    setColor("white");
-    setIsGuessingPlayer(singleplayer ? isGuessingPlayer : !isGuessingPlayer);
-    setGameStarted(true);
-  }, [
-    isGuessingPlayer,
-    setColor,
-    setGameFinished,
-    setGameStarted,
-    setGuesses,
-    setIsGuessingPlayer,
-    setSecret,
-    singleplayer,
-  ]);
+    dispatch(
+      resetMultiplayerGame({
+        secret: newSecret,
+        isGuessingPlayer: singleplayer
+          ? state.isGuessingPlayer
+          : !state.isGuessingPlayer,
+      })
+    );
+  }, [dispatch, singleplayer, state.isGuessingPlayer]);
 
   useEffect(() => {
     if (opponentSentReset && playerSentReset) {
@@ -101,7 +93,7 @@ function Header({ singleplayer }) {
             boxShadow: "0 0 4px gray;",
           }}
         />
-      ) : gameFinished ? (
+      ) : state.gameFinished ? (
         <Button
           aria-label="Switch sides"
           disabled={playerSentReset}

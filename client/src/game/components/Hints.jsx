@@ -1,7 +1,7 @@
 import { Circle, HStack } from "@chakra-ui/react";
 import { memo, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { v4 as uuid } from "uuid";
-import { useSecret } from "../../context/SecretProvider";
 import {
   HINT_BORDER,
   HINT_SIZE,
@@ -10,7 +10,7 @@ import {
 import { calculateHints } from "../../resources/game-logic";
 
 function Hints({ guess }) {
-  const { secret } = useSecret();
+  const secret = useSelector((state) => state.updateGame.secret);
 
   const [hintColors, setHintColors] = useState(
     Array(4).fill(PLACEHOLDER_HINT_COLOR)

@@ -1,19 +1,22 @@
 import { VStack } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
-import { useSecret } from "../../context/SecretProvider";
+import { useDispatch } from "react-redux";
 import { getRandomSecret } from "../../resources/game-logic";
+import { setSecretSingleplayer } from "../../store/slices/updateGameSlice";
 import Board from "../components/Board";
 
 function SingleplayerGame() {
-  const { setIsGuessingPlayer } = useIsGuessingPlayer();
-  const { setSecret } = useSecret();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setIsGuessingPlayer(true);
     let newSecret = getRandomSecret();
-    setSecret(newSecret);
-  }, [setIsGuessingPlayer, setSecret]);
+    dispatch(
+      setSecretSingleplayer({
+        isGuessingPlayer: true,
+        secret: newSecret,
+      })
+    );
+  }, [dispatch]);
 
   return (
     <VStack justify="center" align="center" minH="100vh" spacing={4} margin={4}>

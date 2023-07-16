@@ -1,19 +1,23 @@
 import { Circle, Flex } from "@chakra-ui/react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { v4 as uuid } from "uuid";
-import { useColor } from "../../context/ColorProvider";
-import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
-import { useSecret } from "../../context/SecretProvider";
 import {
   ACTIVE_PIECE_BORDER,
   COLORS,
   INACTIVE_PIECE_BORDER,
   PIECE_SIZE,
 } from "../../resources/constants";
+import { setColor } from "../../store/slices/updateGameSlice";
 
 function ColorPicker({ orientation }) {
-  const { color, setColor } = useColor();
-  const { secret } = useSecret();
-  const { isGuessingPlayer } = useIsGuessingPlayer();
+  const dispatch = useDispatch();
+  const state = useSelector((state) => {
+    return {
+      color: state.updateGame.color,
+      secret: state.updateGame.secret,
+      isGuessingPlayer: state.updateGame.isGuessingPlayer,
+    };
+  }, shallowEqual);
 
   return (
     <Flex
@@ -28,14 +32,15 @@ function ColorPicker({ orientation }) {
           size={PIECE_SIZE}
           bg={circleColor}
           border={
-            circleColor === color && (isGuessingPlayer || secret.length === 0)
+            circleColor === state.color &&
+            (state.isGuessingPlayer || state.secret.length === 0)
               ? ACTIVE_PIECE_BORDER
               : INACTIVE_PIECE_BORDER
           }
           key={uuid()}
           onClick={() =>
-            isGuessingPlayer || secret.length === 0
-              ? setColor(circleColor)
+            state.isGuessingPlayer || state.secret.length === 0
+              ? dispatch(setColor(circleColor))
               : null
           }
           style={{ cursor: "pointer" }}

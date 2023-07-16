@@ -1,9 +1,7 @@
 import { Button, Circle, Flex, Heading, HStack } from "@chakra-ui/react";
 import { useState } from "react";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { v4 as uuid } from "uuid";
-import { useColor } from "../../context/ColorProvider";
-import { useIsGuessingPlayer } from "../../context/IsGuessingPlayerProvider";
-import { useSecret } from "../../context/SecretProvider";
 import { useSocket } from "../../context/SocketProvider";
 import {
   INACTIVE_PIECE_BORDER,
@@ -11,13 +9,19 @@ import {
   PLACEHOLDER_PIECE_COLOR,
   ROW_WIDTH,
 } from "../../resources/constants";
+import { setSecret } from "../../store/slices/updateGameSlice";
 import ColorPicker from "../components/ColorPicker";
 
 function CreateSecretScreen() {
-  const { setSecret } = useSecret();
-  const { isGuessingPlayer } = useIsGuessingPlayer();
-  const { color } = useColor();
+  const state = useSelector((state) => {
+    return {
+      isGuessingPlayer: state.updateGame.isGuessingPlayer,
+      color: state.updateGame.color,
+    };
+  }, shallowEqual);
   const socket = useSocket();
+
+  const dispatch = useDispatch();
 
   const [currentSecret, setCurrentSecret] = useState(
     Array(4).fill(PLACEHOLDER_PIECE_COLOR)
@@ -25,18 +29,18 @@ function CreateSecretScreen() {
 
   function updateCurrentSecret(index) {
     let secret = [...currentSecret];
-    secret[index] = color;
+    secret[index] = state.color;
     setCurrentSecret(secret);
   }
 
   function createAndEmitSecret() {
-    setSecret(currentSecret);
+    dispatch(setSecret(currentSecret));
     socket.emit("set secret", currentSecret);
   }
 
   return (
     <>
-      {isGuessingPlayer ? (
+      {state.isGuessingPlayer ? (
         <Flex align="center" justify="center" minH="100vh">
           <Heading as="h1" size="2xl">
             Waiting for other player to create their secret
@@ -60,7 +64,7 @@ function CreateSecretScreen() {
                     <Circle
                       size={PIECE_SIZE}
                       bg={currentGuessColor}
-                      cursor={color === "white" ? "auto" : "pointer"}
+                      cursor={state.color === "white" ? "auto" : "pointer"}
                       border={INACTIVE_PIECE_BORDER}
                       key={uuid()}
                       onClick={() => updateCurrentSecret(index)}
